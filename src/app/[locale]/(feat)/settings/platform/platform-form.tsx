@@ -99,10 +99,15 @@ export default function PlatformForm({
 
 					<div>
 						<TabsContent value={PlatformType.DOUYIN}>
+							{/*
+							 * 全域 Cookie 欄位已移除：後端不再提供全域後備（共用同一組
+							 * sessionid 會讓併發錄製互相踢掉），而且它的內容會被印進 run.log。
+							 * 抖音的登入態一律走主播層級的 Cookie 檔，由 dycookie 維護。
+							 */}
 							<DouyinTabContent
 								controlPrefix={"douyinConfig"}
 								control={form.control}
-								showCookies
+								showCookies={false}
 								showPartedDownloadRetry
 								showFetchDelay
 								showDownloadCheckInterval

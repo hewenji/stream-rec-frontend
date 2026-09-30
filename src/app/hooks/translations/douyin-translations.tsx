@@ -18,6 +18,21 @@ export type DouyinTabString = {
 	sourceFormat: string
 	sourceFormatPlaceholder: string
 	sourceFormatDescription: string | React.ReactNode
+	cookiesFile: string
+	cookiesFileDescription: string
+	account: string
+	accountDescription: string
+	accountPlaceholder: string
+	accountNone: string
+	accountMissingFile: string
+	accountGaps: string
+	login: string
+	loginRequested: string
+	loginFailed: string
+	refreshAccounts: string
+	advanced: string
+	loadingAccounts: string
+	emptyAccounts: string
 } & PlatformTabContentStrings
 
 export const useDouyinTranslations = () => {
@@ -35,6 +50,21 @@ export const useDouyinTranslations = () => {
 			qualityDescription: t("qualityDescription"),
 			qualityDefault: t("qualityDefault"),
 			cookieDescription: <RichText>{tags => t.rich("cookieDescription", tags)}</RichText>,
+			cookiesFile: t("cookiesFile"),
+			cookiesFileDescription: t("cookiesFileDescription"),
+			account: t("account"),
+			accountDescription: t("accountDescription"),
+			accountPlaceholder: t("accountPlaceholder"),
+			accountNone: t("accountNone"),
+			accountMissingFile: t("accountMissingFile"),
+			accountGaps: t("accountGaps"),
+			login: t("login"),
+			loginRequested: t("loginRequested"),
+			loginFailed: t("loginFailed"),
+			refreshAccounts: t("refreshAccounts"),
+			advanced: t("advanced"),
+			loadingAccounts: t("loadingAccounts"),
+			emptyAccounts: t("emptyAccounts"),
 		}),
 		[t, baseTranslations]
 	)

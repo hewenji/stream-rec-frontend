@@ -15,6 +15,10 @@ export enum DouyinQuality {
 
 export const douyinGlobalConfig = globalPlatformConfig.extend({
 	cookies: z.string().nullish(),
+	// Cookie 由 dycookie 維護並寫成檔案，前端只設定「要讀哪個檔」。
+	// 直接貼 Cookie 字串的欄位已移除：那份字串會被 stream-rec 以 INFO 等級
+	// 連同整個 AppConfig 印進 run.log，等於把 sessionid 原文長期留存。
+	cookiesFile: z.string().nullish(),
 	quality: z.nativeEnum(DouyinQuality).nullish(),
 	sourceFormat: z.enum(["flv", "hls"]).nullish(),
 })

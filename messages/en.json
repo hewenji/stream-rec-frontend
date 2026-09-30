@@ -14,61 +14,61 @@
 		"relativeMessage": "from last {date, select, 0 {week} 2 {year} 1 {month} other {day}}"
 	},
 	"StreamerData": {
-	  "state": "{state, select, 0 {not live} 1 {live now} 2 {not live} 3 {detecting} 4 {error} 5 {disabled} 6 {not found} 7 {no space} other {disabled}}",
-	  "noStreamsYet": "no streams yet",
-	  "template": "Template",
-	  "name": "Name",
-	  "url": "Url",
-	  "startTime": "Recording start time",
-	  "endTime": "Recording end time"
+		"state": "{state, select, 0 {not live} 1 {live now} 2 {not live} 3 {detecting} 4 {error} 5 {disabled} 6 {not found} 7 {no space} other {disabled}}",
+		"noStreamsYet": "no streams yet",
+		"template": "Template",
+		"name": "Name",
+		"url": "Url",
+		"startTime": "Recording start time",
+		"endTime": "Recording end time"
 	},
 	"streamer": {
-	  "form": {
-	    "fields": {
-	      "enableScheduling": {
-	        "label": "Enable Scheduling"
-	      },
-	      "startTime": {
-	        "label": "Start Time",
-	        "tooltip": "Set a time to begin recording. If left blank, recording can start at any time."
-	      },
-	      "endTime": {
-	        "label": "End Time",
-	        "tooltip": "Set a time to automatically stop recording. If left blank, recording will continue until the stream ends."
-	      }
-	    },
-	    "overnightSchedule": "This schedule will run overnight and stop on the following day.",
-	    "template": {
-	      "default": "Select a template",
-	      "search": "Search a template",
-	      "description": "Select a template to use its configuration. <important>Warning : You can not change this streamer`s download configuration after selection.</important>",
-	      "noTemplate": "no templates available",
-	      "doNotUseTemplate": "do not use a template"
-	    },
-	    "asTemplate": {
-	      "label": "As template",
-	      "description": "Whether to use this streamer as a template for other streamers."
-	    },
-	    "name": {
-	      "description": "The name of the streamer."
-	    },
-	    "url": {
-	      "description": "Streamer`s streaming url"
-	    },
-	    "enabledRecording": {
-	      "label": "Enabled recording",
-	      "description": "Whether to enable recording for this streamer."
-	    },
-	    "streamerOnlyOptions": "Per-streamer options",
-	    "alert": {
-	      "title": "Heads up!",
-	      "overrideDescription": "Below options will override the global settings for this streamer. If you want to use the global settings, leave these fields empty."
-	    },
-	    "platformSpecificOptions": "Platform specific options",
-	    "defaultDownloadOptions": "Download options",
-	    "callbackOptions": "Callback options",
-	    "save": "Save"
-	  }
+		"form": {
+			"fields": {
+				"enableScheduling": {
+					"label": "Enable Scheduling"
+				},
+				"startTime": {
+					"label": "Start Time",
+					"tooltip": "Set a time to begin recording. If left blank, recording can start at any time."
+				},
+				"endTime": {
+					"label": "End Time",
+					"tooltip": "Set a time to automatically stop recording. If left blank, recording will continue until the stream ends."
+				}
+			},
+			"overnightSchedule": "This schedule will run overnight and stop on the following day.",
+			"template": {
+				"default": "Select a template",
+				"search": "Search a template",
+				"description": "Select a template to use its configuration. <important>Warning : You can not change this streamer`s download configuration after selection.</important>",
+				"noTemplate": "no templates available",
+				"doNotUseTemplate": "do not use a template"
+			},
+			"asTemplate": {
+				"label": "As template",
+				"description": "Whether to use this streamer as a template for other streamers."
+			},
+			"name": {
+				"description": "The name of the streamer."
+			},
+			"url": {
+				"description": "Streamer`s streaming url"
+			},
+			"enabledRecording": {
+				"label": "Enabled recording",
+				"description": "Whether to enable recording for this streamer."
+			},
+			"streamerOnlyOptions": "Per-streamer options",
+			"alert": {
+				"title": "Heads up!",
+				"overrideDescription": "Below options will override the global settings for this streamer. If you want to use the global settings, leave these fields empty."
+			},
+			"platformSpecificOptions": "Platform specific options",
+			"defaultDownloadOptions": "Download options",
+			"callbackOptions": "Callback options",
+			"save": "Save"
+		}
 	},
 	"Sidebar": {
 		"dashboard": "Dashboard",
@@ -224,7 +224,22 @@
 		"sourceFormat": "Source format",
 		"sourceFormatDescription": "Select the source format of the Douyin live stream. Default is set to flv. <important>It is recommended to use flv sources as some streams has no hls streams. Please use Streamlink to download HLS sources.</important>",
 		"sourceFormatPlaceholder": "Please select a source format",
-		"cookieDescription": "Please copy and paste, invalid cookies will be discarded automatically. Optional. <important>__ac_nonce='anything' and __ac_signature='anything' must be included</important>"
+		"cookieDescription": "Advanced fallback: paste a raw Cookie header. Disables file hot-reload for this streamer. Optional. <important>Prefer cookiesFile via the account picker.</important>",
+		"cookiesFile": "Cookie file path",
+		"cookiesFileDescription": "Absolute path inside the container, e.g. /opt/secrets/douyin_cookies_<account>.txt. Prefer the account dropdown above. Leave empty to record anonymously (chat works, gifts do not).",
+		"account": "Douyin account",
+		"accountDescription": "Pick a logged-in account maintained by dycookie. Each streamer needs its own account — sharing one sessionid across concurrent recordings kicks everyone offline for gifts.",
+		"accountPlaceholder": "Select a Douyin account",
+		"accountNone": "None (anonymous)",
+		"accountMissingFile": "cookie file missing in container",
+		"accountGaps": "Gaps",
+		"login": "Request login",
+		"loginRequested": "Login requested on host — check Telegram / QR",
+		"loginFailed": "Login request failed",
+		"refreshAccounts": "Refresh",
+		"advanced": "Advanced (raw cookies / manual path)",
+		"loadingAccounts": "Loading accounts…",
+		"emptyAccounts": "No Douyin accounts available"
 	},
 	"Douyu": {
 		"platform": "Douyu",

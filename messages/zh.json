@@ -14,61 +14,61 @@
 		"relativeMessage": "相对于上一{date, select, 0 {周} 2 {年} 1 {月} other {日}}"
 	},
 	"StreamerData": {
-	  "state": "{state, select, 0 {未直播} 1 {直播中} 2 {超出时间} 3 {检测中} 4 {错误} 5 {已禁用} 6 {已注销} 7 {空间不足} other {已禁用}}",
-	  "noStreamsYet": "暂无直播",
-	  "template": "模板",
-	  "name": "名称",
-	  "url": "直播链接",
-	  "startTime": "录制开始时间",
-	  "endTime": "录制结束时间"
+		"state": "{state, select, 0 {未直播} 1 {直播中} 2 {超出时间} 3 {检测中} 4 {错误} 5 {已禁用} 6 {已注销} 7 {空间不足} other {已禁用}}",
+		"noStreamsYet": "暂无直播",
+		"template": "模板",
+		"name": "名称",
+		"url": "直播链接",
+		"startTime": "录制开始时间",
+		"endTime": "录制结束时间"
 	},
 	"streamer": {
-	  "form": {
-	    "fields": {
-	      "enableScheduling": {
-	        "label": "启用定时录制"
-	      },
-	      "startTime": {
-	        "label": "开始时间",
-	        "tooltip": "设置录制开始时间。如果留空，则随时可以开始录制。"
-	      },
-	      "endTime": {
-	        "label": "结束时间",
-	        "tooltip": "设置自动停止录制的时间。如果留空，录制将持续到直播结束。"
-	      }
-	    },
-	    "overnightSchedule": "该计划将跨夜运行，并在第二天停止。",
-	    "template": {
-	      "default": "选择一个模板",
-	      "search": "搜索模板",
-	      "description": "选择一个模板，工具将会使用这个模板的参数进行录制直播。",
-	      "noTemplate": "没有找到模板",
-	      "doNotUseTemplate": "不使用模板"
-	    },
-	    "asTemplate": {
-	      "label": "作为模板",
-	      "description": "是否作为模板"
-	    },
-	    "name": {
-	      "description": "主播名称"
-	    },
-	    "url": {
-	      "description": "直播链接格式"
-	    },
-	    "enabledRecording": {
-	      "label": "启用录制",
-	      "description": "是否启用录制"
-	    },
-	    "streamerOnlyOptions": "主播专属选项",
-	    "alert": {
-	      "title": "请注意！",
-	      "overrideDescription": "以下配置将会覆盖全局配置，每项配置默认都为空。"
-	    },
-	    "platformSpecificOptions": "平台专属选项",
-	    "defaultDownloadOptions": "默认下载选项",
-	    "callbackOptions": "回调选项",
-	    "save": "保存"
-	  }
+		"form": {
+			"fields": {
+				"enableScheduling": {
+					"label": "启用定时录制"
+				},
+				"startTime": {
+					"label": "开始时间",
+					"tooltip": "设置录制开始时间。如果留空，则随时可以开始录制。"
+				},
+				"endTime": {
+					"label": "结束时间",
+					"tooltip": "设置自动停止录制的时间。如果留空，录制将持续到直播结束。"
+				}
+			},
+			"overnightSchedule": "该计划将跨夜运行，并在第二天停止。",
+			"template": {
+				"default": "选择一个模板",
+				"search": "搜索模板",
+				"description": "选择一个模板，工具将会使用这个模板的参数进行录制直播。",
+				"noTemplate": "没有找到模板",
+				"doNotUseTemplate": "不使用模板"
+			},
+			"asTemplate": {
+				"label": "作为模板",
+				"description": "是否作为模板"
+			},
+			"name": {
+				"description": "主播名称"
+			},
+			"url": {
+				"description": "直播链接格式"
+			},
+			"enabledRecording": {
+				"label": "启用录制",
+				"description": "是否启用录制"
+			},
+			"streamerOnlyOptions": "主播专属选项",
+			"alert": {
+				"title": "请注意！",
+				"overrideDescription": "以下配置将会覆盖全局配置，每项配置默认都为空。"
+			},
+			"platformSpecificOptions": "平台专属选项",
+			"defaultDownloadOptions": "默认下载选项",
+			"callbackOptions": "回调选项",
+			"save": "保存"
+		}
 	},
 	"Sidebar": {
 		"dashboard": "控制面板",
@@ -225,7 +225,22 @@
 		"sourceFormat": "源格式 (实验性）",
 		"sourceFormatDescription": "选择一个源格式，工具将会尝试录制这个格式的流。默认为flv。 <important>请注意：抖音部分画质无hls流，或无声音。建议使用flv。HLS流请使用Streamlink下载引擎。</important>",
 		"sourceFormatPlaceholder": "请选择一个源格式",
-		"cookieDescription": "请直接复制粘贴，无效cookies将自动剔除，非必填。 <important>请注意：Cookie字符串必须存在 __ac_nonce, __ac_signature。为了避免风控，建议使用小号的cookies。</important>"
+		"cookieDescription": "進階後備：直接貼上 Cookie 標頭。會關閉此主播的檔案熱重載。非必填。<important>請優先用帳號選單綁定 cookiesFile。</important>",
+		"cookiesFile": "Cookie 檔路徑",
+		"cookiesFileDescription": "容器內絕對路徑，例如 /opt/secrets/douyin_cookies_<帳號>.txt。請優先用上方帳號下拉選單。留空即匿名連線（聊天照收，禮物沒有）。",
+		"account": "抖音帳號",
+		"accountDescription": "選擇由 dycookie 維護的已登入帳號。每位主播需要自己的帳號——併發錄製共用同一個 sessionid 會互踢，結果大家都收不到禮物。",
+		"accountPlaceholder": "選擇抖音帳號",
+		"accountNone": "無（匿名）",
+		"accountMissingFile": "容器內找不到 Cookie 檔",
+		"accountGaps": "缺口",
+		"login": "請求登入",
+		"loginRequested": "已向本機 bridge 請求登入——請查看 Telegram / 二维码",
+		"loginFailed": "登入請求失敗",
+		"refreshAccounts": "重新整理",
+		"advanced": "進階（原始 Cookie / 手動路徑）",
+		"loadingAccounts": "載入帳號中…",
+		"emptyAccounts": "沒有可用的抖音帳號"
 	},
 	"Douyu": {
 		"platform": "斗鱼",

@@ -1,4 +1,5 @@
-import { FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/src/components/new-york/ui/form"
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/src/components/new-york/ui/form"
+import { Input } from "@/src/components/new-york/ui/input"
 import { SelectItem } from "@/src/components/new-york/ui/select"
 import React from "react"
 import { Badge } from "@/src/components/new-york/ui/badge"
@@ -8,10 +9,15 @@ import {
 	PlatformTabContentProps,
 } from "@/src/app/[locale]/(feat)/settings/platform/tabs/common-platform-tab"
 import { DouyinQuality, DouyinTabString } from "@/src/app/hooks/translations/douyin-translations"
+import { DouyinAccountPicker } from "@/src/app/[locale]/(feat)/streamers/components/platforms/douyin-account-picker"
 
 export type DouyinTabContentProps = {
 	qualityOptions: DouyinQuality[]
 	allowNone?: boolean
+	/** Streamer settings: show account dropdown + login + advanced raw cookies. */
+	showAccountPicker?: boolean
+	/** Global / legacy: free-text cookiesFile path (no account list). */
+	showCookiesFile?: boolean
 } & PlatformTabContentProps<DouyinTabString>
 
 export const DouyinTabContent = ({
@@ -21,6 +27,8 @@ export const DouyinTabContent = ({
 	showCookies,
 	showPartedDownloadRetry,
 	showDownloadCheckInterval,
+	showAccountPicker = false,
+	showCookiesFile = false,
 	qualityOptions,
 	allowNone = false,
 	strings,
@@ -35,6 +43,54 @@ export const DouyinTabContent = ({
 			showFetchDelay={showFetchDelay}
 			showDownloadCheckInterval={showDownloadCheckInterval}
 		>
+			{showAccountPicker && (
+				<DouyinAccountPicker
+					control={control}
+					controlPrefix={controlPrefix}
+					showAdvancedFallback={true}
+					strings={{
+						account: strings.account,
+						accountDescription: strings.accountDescription,
+						accountPlaceholder: strings.accountPlaceholder,
+						accountNone: strings.accountNone,
+						accountMissingFile: strings.accountMissingFile,
+						accountGaps: strings.accountGaps,
+						login: strings.login,
+						loginRequested: strings.loginRequested,
+						loginFailed: strings.loginFailed,
+						refreshAccounts: strings.refreshAccounts,
+						advanced: strings.advanced,
+						cookiesFile: strings.cookiesFile,
+						cookiesFileDescription: strings.cookiesFileDescription,
+						cookieTitle: strings.cookieTitle,
+						cookieDescription: strings.cookieDescription,
+						loading: strings.loadingAccounts,
+						empty: strings.emptyAccounts,
+					}}
+				/>
+			)}
+
+			{showCookiesFile && !showAccountPicker && (
+				<FormField
+					control={control}
+					name={controlPrefix ? `${controlPrefix}.cookiesFile` : "cookiesFile"}
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>{strings.cookiesFile}</FormLabel>
+							<FormControl>
+								<Input
+									placeholder="/opt/secrets/douyin_cookies_main.txt"
+									value={field.value ?? ""}
+									onChange={field.onChange}
+								/>
+							</FormControl>
+							<FormDescription>{strings.cookiesFileDescription}</FormDescription>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+			)}
+
 			<FormField
 				control={control}
 				name={controlPrefix ? `${controlPrefix}.quality` : "quality"}
