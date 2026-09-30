@@ -66,6 +66,19 @@ export const DouyinTabContent = ({
 						cookieDescription: strings.cookieDescription,
 						loading: strings.loadingAccounts,
 						empty: strings.emptyAccounts,
+						newAccountTitle: strings.newAccountTitle,
+						newAccountDescription: strings.newAccountDescription,
+						newAccountName: strings.newAccountName,
+						newAccountNamePlaceholder: strings.newAccountNamePlaceholder,
+						newAccountSlug: strings.newAccountSlug,
+						newAccountSlugPlaceholder: strings.newAccountSlugPlaceholder,
+						newAccountConfirm: strings.newAccountConfirm,
+						newAccountCancel: strings.newAccountCancel,
+						newAccountNameRequired: strings.newAccountNameRequired,
+						newAccountInvalidSlug: strings.newAccountInvalidSlug,
+						loginPolling: strings.loginPolling,
+						loginSucceeded: strings.loginSucceeded,
+						loginStillRunning: strings.loginStillRunning,
 					}}
 				/>
 			)}

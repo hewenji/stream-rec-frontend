@@ -33,6 +33,19 @@ export type DouyinTabString = {
 	advanced: string
 	loadingAccounts: string
 	emptyAccounts: string
+	newAccountTitle: string
+	newAccountDescription: string
+	newAccountName: string
+	newAccountNamePlaceholder: string
+	newAccountSlug: string
+	newAccountSlugPlaceholder: string
+	newAccountConfirm: string
+	newAccountCancel: string
+	newAccountNameRequired: string
+	newAccountInvalidSlug: string
+	loginPolling: string
+	loginSucceeded: string
+	loginStillRunning: string
 } & PlatformTabContentStrings
 
 export const useDouyinTranslations = () => {
@@ -65,6 +78,19 @@ export const useDouyinTranslations = () => {
 			advanced: t("advanced"),
 			loadingAccounts: t("loadingAccounts"),
 			emptyAccounts: t("emptyAccounts"),
+			newAccountTitle: t("newAccountTitle"),
+			newAccountDescription: t("newAccountDescription"),
+			newAccountName: t("newAccountName"),
+			newAccountNamePlaceholder: t("newAccountNamePlaceholder"),
+			newAccountSlug: t("newAccountSlug"),
+			newAccountSlugPlaceholder: t("newAccountSlugPlaceholder"),
+			newAccountConfirm: t("newAccountConfirm"),
+			newAccountCancel: t("newAccountCancel"),
+			newAccountNameRequired: t("newAccountNameRequired"),
+			newAccountInvalidSlug: t("newAccountInvalidSlug"),
+			loginPolling: t("loginPolling"),
+			loginSucceeded: t("loginSucceeded"),
+			loginStillRunning: t("loginStillRunning"),
 		}),
 		[t, baseTranslations]
 	)

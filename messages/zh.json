@@ -240,7 +240,20 @@
 		"refreshAccounts": "重新整理",
 		"advanced": "進階（原始 Cookie / 手動路徑）",
 		"loadingAccounts": "載入帳號中…",
-		"emptyAccounts": "沒有可用的抖音帳號"
+		"emptyAccounts": "沒有可用的抖音帳號",
+		"newAccountTitle": "新增抖音帳號",
+		"newAccountDescription": "輸入顯示名稱（可用中文暱稱）或英文 slug。掃碼登入成功後會建立新的 Cookie 檔。",
+		"newAccountName": "帳號名稱",
+		"newAccountNamePlaceholder": "例如：念念 或 niannian",
+		"newAccountSlug": "Cookie 檔 slug（選填）",
+		"newAccountSlugPlaceholder": "僅 ASCII；空白則由名稱推導",
+		"newAccountConfirm": "開始登入",
+		"newAccountCancel": "取消",
+		"newAccountNameRequired": "請輸入帳號名稱",
+		"newAccountInvalidSlug": "Slug 僅能使用英數、底線或連字號",
+		"loginPolling": "等待主機掃碼登入…",
+		"loginSucceeded": "登入成功，已選取此帳號",
+		"loginStillRunning": "主機仍在登入中 — 掃碼後請按重新整理"
 	},
 	"Douyu": {
 		"platform": "斗鱼",

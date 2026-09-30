@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useCallback, useEffect, useMemo, useState, useTransition } from "react"
+import React, { useCallback, useEffect, useMemo, useRef, useState, useTransition } from "react"
 import { Control, useFormContext } from "react-hook-form"
 import {
 	FormControl,
@@ -20,10 +20,19 @@ import {
 	SelectValue,
 } from "@/src/components/new-york/ui/select"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/src/components/new-york/ui/collapsible"
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+} from "@/src/components/new-york/ui/dialog"
 import { CookiesFormfield } from "@/src/app/[locale]/(feat)/settings/components/form/cookies-formfield"
 import {
 	DouyinAccount,
 	fetchDouyinAccounts,
+	fetchDouyinLoginStatus,
 	requestDouyinAccountLogin,
 } from "@/src/lib/data/platform/douyin/apis"
 import { CaretSortIcon } from "@radix-ui/react-icons"
@@ -46,6 +55,19 @@ export type DouyinAccountPickerStrings = {
 	cookieDescription: string | React.ReactNode
 	loading: string
 	empty: string
+	newAccountTitle: string
+	newAccountDescription: string
+	newAccountName: string
+	newAccountNamePlaceholder: string
+	newAccountSlug: string
+	newAccountSlugPlaceholder: string
+	newAccountConfirm: string
+	newAccountCancel: string
+	newAccountNameRequired: string
+	newAccountInvalidSlug: string
+	loginPolling: string
+	loginSucceeded: string
+	loginStillRunning: string
 }
 
 type Props = {
@@ -57,6 +79,7 @@ type Props = {
 }
 
 const NONE_VALUE = "__none__"
+const SLUG_RE = /^[a-zA-Z0-9][a-zA-Z0-9_-]{0,63}$/
 
 function matchAccount(accounts: DouyinAccount[], cookiesFile: string | null | undefined): DouyinAccount | undefined {
 	if (!cookiesFile) return undefined
@@ -88,22 +111,36 @@ export function DouyinAccountPicker({
 	const [pending, startTransition] = useTransition()
 	const [advancedOpen, setAdvancedOpen] = useState(false)
 
+	const [newOpen, setNewOpen] = useState(false)
+	const [newName, setNewName] = useState("")
+	const [newSlug, setNewSlug] = useState("")
+	const [newError, setNewError] = useState<string | null>(null)
+	const pollStopRef = useRef(false)
+
 	const load = useCallback(() => {
-		startTransition(async () => {
-			try {
-				setLoadError(null)
-				const res = await fetchDouyinAccounts()
-				setAccounts(res.accounts || [])
-				setGaps(res.gaps || [])
-			} catch (e: any) {
-				setLoadError(e?.message || String(e))
-				setAccounts([])
-			}
+		return new Promise<DouyinAccount[]>((resolve) => {
+			startTransition(async () => {
+				try {
+					setLoadError(null)
+					const res = await fetchDouyinAccounts()
+					const list = res.accounts || []
+					setAccounts(list)
+					setGaps(res.gaps || [])
+					resolve(list)
+				} catch (e: any) {
+					setLoadError(e?.message || String(e))
+					setAccounts([])
+					resolve([])
+				}
+			})
 		})
 	}, [])
 
 	useEffect(() => {
 		load()
+		return () => {
+			pollStopRef.current = true
+		}
 	}, [load])
 
 	const enabledAccounts = useMemo(
@@ -117,21 +154,107 @@ export function DouyinAccountPicker({
 		[accounts, currentCookiesFile]
 	)
 
-	const onLogin = () => {
-		const name = selectedAccount?.name || enabledAccounts[0]?.name
-		if (!name) {
-			setStatusMsg(strings.empty)
-			return
-		}
+	const selectAccountOnForm = useCallback(
+		(acc: DouyinAccount) => {
+			if (!acc.cookiesFile) return
+			form.setValue(cookiesFileName, acc.cookiesFile, { shouldDirty: true })
+			form.setValue(cookiesName, null, { shouldDirty: true })
+		},
+		[form, cookiesFileName, cookiesName]
+	)
+
+	const pollAfterLogin = useCallback(
+		(accountName: string, preferCookiesFile?: string | null) => {
+			pollStopRef.current = false
+			setStatusMsg(strings.loginPolling)
+			let attempts = 0
+			const maxAttempts = 90 // ~3 minutes at 2s
+			const tick = async () => {
+				if (pollStopRef.current) return
+				attempts += 1
+				const list = await load()
+				const found =
+					list.find(a => a.name === accountName) ||
+					(preferCookiesFile ? matchAccount(list, preferCookiesFile) : undefined)
+				if (found?.cookiesFile) {
+					selectAccountOnForm(found)
+				}
+				const status = await fetchDouyinLoginStatus(accountName).catch(() => null)
+				const job = status?.job
+				if (job?.status === "ok") {
+					const refreshed = await load()
+					const acc =
+						refreshed.find(a => a.name === accountName) ||
+						(preferCookiesFile ? matchAccount(refreshed, preferCookiesFile) : undefined)
+					if (acc) selectAccountOnForm(acc)
+					setStatusMsg(strings.loginSucceeded)
+					return
+				}
+				if (job?.status === "failed") {
+					setStatusMsg(`${strings.loginFailed}: ${job.reason || ""}`)
+					return
+				}
+				if (attempts >= maxAttempts) {
+					setStatusMsg(strings.loginStillRunning)
+					return
+				}
+				window.setTimeout(tick, 2000)
+			}
+			window.setTimeout(tick, 1500)
+		},
+		[load, selectAccountOnForm, strings]
+	)
+
+	const triggerLogin = (name: string, opts?: { create?: boolean; slug?: string }) => {
 		startTransition(async () => {
-			const res = await requestDouyinAccountLogin(name)
+			const res = await requestDouyinAccountLogin(name, {
+				create: opts?.create,
+				slug: opts?.slug,
+			})
 			if (res.ok) {
 				setStatusMsg(res.message || strings.loginRequested)
-				load()
+				if (res.cookiesFile) {
+					form.setValue(cookiesFileName, res.cookiesFile, { shouldDirty: true })
+					form.setValue(cookiesName, null, { shouldDirty: true })
+				}
+				await load()
+				pollAfterLogin(name, res.cookiesFile)
 			} else {
 				setStatusMsg(`${strings.loginFailed}: ${res.error || ""}${res.hint ? ` — ${res.hint}` : ""}`)
 			}
 		})
+	}
+
+	const onLogin = () => {
+		// Existing selection → re-login that account.
+		if (selectedAccount?.name) {
+			triggerLogin(selectedAccount.name)
+			return
+		}
+		// Anonymous / empty → prompt for a NEW account name (do NOT fall back to first account).
+		setNewName("")
+		setNewSlug("")
+		setNewError(null)
+		setNewOpen(true)
+	}
+
+	const onConfirmNewAccount = () => {
+		const name = newName.trim()
+		if (!name) {
+			setNewError(strings.newAccountNameRequired)
+			return
+		}
+		if (name.includes("/") || name.includes("\\") || name.length > 64) {
+			setNewError(strings.newAccountNameRequired)
+			return
+		}
+		const slug = newSlug.trim()
+		if (slug && !SLUG_RE.test(slug)) {
+			setNewError(strings.newAccountInvalidSlug)
+			return
+		}
+		setNewOpen(false)
+		triggerLogin(name, { create: true, slug: slug || undefined })
 	}
 
 	return (
@@ -194,7 +317,7 @@ export function DouyinAccountPicker({
 									<Button type="button" variant="secondary" disabled={pending} onClick={onLogin}>
 										{strings.login}
 									</Button>
-									<Button type="button" variant="outline" disabled={pending} onClick={load}>
+									<Button type="button" variant="outline" disabled={pending} onClick={() => load()}>
 										{strings.refreshAccounts}
 									</Button>
 								</div>
@@ -251,6 +374,55 @@ export function DouyinAccountPicker({
 					</CollapsibleContent>
 				</Collapsible>
 			)}
+
+			<Dialog open={newOpen} onOpenChange={setNewOpen}>
+				<DialogContent className="sm:max-w-md">
+					<DialogHeader>
+						<DialogTitle>{strings.newAccountTitle}</DialogTitle>
+						<DialogDescription>{strings.newAccountDescription}</DialogDescription>
+					</DialogHeader>
+					<div className="space-y-3 py-2">
+						<div className="space-y-1.5">
+							<label className="text-sm font-medium">{strings.newAccountName}</label>
+							<Input
+								autoFocus
+								value={newName}
+								placeholder={strings.newAccountNamePlaceholder}
+								onChange={e => {
+									setNewName(e.target.value)
+									setNewError(null)
+								}}
+								onKeyDown={e => {
+									if (e.key === "Enter") {
+										e.preventDefault()
+										onConfirmNewAccount()
+									}
+								}}
+							/>
+						</div>
+						<div className="space-y-1.5">
+							<label className="text-sm font-medium">{strings.newAccountSlug}</label>
+							<Input
+								value={newSlug}
+								placeholder={strings.newAccountSlugPlaceholder}
+								onChange={e => {
+									setNewSlug(e.target.value)
+									setNewError(null)
+								}}
+							/>
+						</div>
+						{newError && <p className="text-sm text-destructive">{newError}</p>}
+					</div>
+					<DialogFooter>
+						<Button type="button" variant="outline" onClick={() => setNewOpen(false)}>
+							{strings.newAccountCancel}
+						</Button>
+						<Button type="button" disabled={pending} onClick={onConfirmNewAccount}>
+							{strings.newAccountConfirm}
+						</Button>
+					</DialogFooter>
+				</DialogContent>
+			</Dialog>
 		</div>
 	)
 }

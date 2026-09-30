@@ -239,7 +239,20 @@
 		"refreshAccounts": "Refresh",
 		"advanced": "Advanced (raw cookies / manual path)",
 		"loadingAccounts": "Loading accounts…",
-		"emptyAccounts": "No Douyin accounts available"
+		"emptyAccounts": "No Douyin accounts available",
+		"newAccountTitle": "Add Douyin account",
+		"newAccountDescription": "Enter a display name (Chinese nick OK) or ASCII slug. A new cookie file will be created after QR login.",
+		"newAccountName": "Account name",
+		"newAccountNamePlaceholder": "e.g. 念念 or niannian",
+		"newAccountSlug": "Cookie file slug (optional)",
+		"newAccountSlugPlaceholder": "ascii only; default derived from name",
+		"newAccountConfirm": "Start login",
+		"newAccountCancel": "Cancel",
+		"newAccountNameRequired": "Account name is required",
+		"newAccountInvalidSlug": "Slug must be ASCII letters, digits, _ or -",
+		"loginPolling": "Waiting for QR login on host…",
+		"loginSucceeded": "Login succeeded — account selected",
+		"loginStillRunning": "Login still running on host — click Refresh after scanning QR"
 	},
 	"Douyu": {
 		"platform": "Douyu",
