@@ -4,4 +4,8 @@
 scripts
 *Dockerfile*
 node_modules
+.next
+.git
 .env
+*.md
+coverage
